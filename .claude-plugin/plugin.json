@@ -1,0 +1,56 @@
+{
+  "name": "usage-pet",
+  "version": "0.1.0",
+  "description": "A tiny cat above your Claude Code prompt that shows your 5-hour and weekly usage limits, and changes its face as you use them up.",
+  "author": { "name": "Bart Wang" },
+  "license": "MIT",
+  "repository": "https://github.com/Tiange781122/claude-code-usage-pet",
+  "keywords": ["usage", "rate-limit", "kaomoji", "cat", "status"],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "language": {
+      "type": "string",
+      "title": "Language",
+      "description": "Language of the cat's lines. auto follows your system locale.",
+      "options": ["auto", "en", "zh-TW", "ja"],
+      "default": "auto"
+    },
+    "petStyle": {
+      "type": "string",
+      "title": "Pet style",
+      "description": "kaomoji needs a CJK-capable font; pick ascii if you see boxes or question marks. auto uses kaomoji for Chinese/Japanese, ascii otherwise.",
+      "options": ["auto", "kaomoji", "ascii"],
+      "default": "auto"
+    },
+    "timeZone": {
+      "type": "string",
+      "title": "Time zone",
+      "description": "IANA time zone for reset times, e.g. Asia/Tokyo. auto uses this machine's time zone.",
+      "default": "auto"
+    },
+    "halfAt": {
+      "type": "number",
+      "title": "Yellow from (%)",
+      "description": "Usage percent where the cat starts to look concerned.",
+      "default": 50,
+      "min": 1,
+      "max": 100
+    },
+    "warnAt": {
+      "type": "number",
+      "title": "Red from (%)",
+      "description": "Usage percent where the cat gets worried.",
+      "default": 80,
+      "min": 1,
+      "max": 100
+    },
+    "outAt": {
+      "type": "number",
+      "title": "Exhausted from (%)",
+      "description": "Usage percent where the cat is out of energy.",
+      "default": 95,
+      "min": 1,
+      "max": 100
+    }
+  }
+}

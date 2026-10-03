@@ -1,0 +1,12 @@
+{
+  "name": "usage-pet",
+  "description": "Claude Code Usage Pet: a tiny cat that watches your Claude Code usage limits.",
+  "owner": { "name": "Bart Wang" },
+  "plugins": [
+    {
+      "name": "usage-pet",
+      "source": "./",
+      "description": "A tiny cat above your Claude Code prompt that shows your 5-hour and weekly usage limits, and changes its face as you use them up."
+    }
+  ]
+}
