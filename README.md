@@ -6,7 +6,7 @@ A tiny cat that sits above your Claude Code prompt and watches your usage limits
 
 ```
 5h  ██░░░░░░░░░░    19% (+8%)   ↻18:10            (=^･ω･^=)ﾉ "Feeling great!"
-wk  ████████████    96% (+15%)  ↻10/5 18:00       (=ｘェｘ=) "Almost out this week..."
+wk  ████████████    96% (+2%)   ↻10/5 18:00       (=ｘェｘ=) "Almost out this week..."
 ```
 
 The blue part of each bar and the blue `(+8%)` are this conversation's share of the window (see [below](#this-conversations-share)).
@@ -15,7 +15,7 @@ ASCII style, for terminals without CJK fonts:
 
 ```
 5h  [##----------]  19% (+8%)   reset 18:10       (=^.^=)/ "Feeling great!"
-wk  [############]  96% (+15%)  reset 10/5 18:00  (=x.x=) "Almost out this week..."
+wk  [############]  96% (+2%)   reset 10/5 18:00  (=x.x=) "Almost out this week..."
 ```
 
 > Not an official Anthropic project. "Claude" and "Claude Code" are trademarks of Anthropic.
