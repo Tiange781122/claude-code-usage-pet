@@ -14,8 +14,8 @@ The blue part of each bar and the blue `(+8%)` are this conversation's share of 
 ASCII style, for terminals without CJK fonts:
 
 ```
-5h  [##----------]  19%  reset 18:10       (=^.^=)/ "Feeling great!"
-wk  [############]  96%  reset 10/5 18:00  (=x.x=) "Almost out this week..."
+5h  [##----------]  19% (+8%)   reset 18:10       (=^.^=)/ "Feeling great!"
+wk  [############]  96% (+15%)  reset 10/5 18:00  (=x.x=) "Almost out this week..."
 ```
 
 > Not an official Anthropic project. "Claude" and "Claude Code" are trademarks of Anthropic.
@@ -31,6 +31,8 @@ wk  [############]  96%  reset 10/5 18:00  (=x.x=) "Almost out this week..."
 | 95% and up | `(=ｘェｘ=)` / `(=x.x=)` | red |
 
 The thresholds are configurable. Reset times are shown in your local time zone.
+
+The bar also has a **blue segment** and a **blue `(+N%)`** for the part of the window this conversation used (GitHub can't show the color in the examples above). See [This conversation's share](#this-conversations-share).
 
 ## This conversation's share
 
