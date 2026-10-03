@@ -5,8 +5,8 @@ English | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
 A tiny cat that sits above your Claude Code prompt and watches your usage limits. Each window (5-hour, weekly) gets its own cat, and the cat's face changes as you use the window up.
 
 ```
-5h  ██░░░░░░░░░░    19% (+8%)   ↻18:10            (=^･ω･^=)ﾉ 「精神很好喵」
-週  ████████████    96% (+15%)  ↻10/5 18:00       (=ｘェｘ=) 「這週快沒了喵…」
+5h  ██░░░░░░░░░░    19% (+8%)   ↻18:10            (=^･ω･^=)ﾉ "Feeling great!"
+wk  ████████████    96% (+15%)  ↻10/5 18:00       (=ｘェｘ=) "Almost out this week..."
 ```
 
 The blue part of each bar and the blue `(+8%)` are this conversation's share of the window (see [below](#this-conversations-share)).
