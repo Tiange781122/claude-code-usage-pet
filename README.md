@@ -5,16 +5,16 @@ English | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
 A tiny cat that sits above your Claude Code prompt and watches your usage limits. Each window (5-hour, weekly) gets its own cat, and the cat's face changes as you use the window up.
 
 ```
-5h  ██░░░░░░░░░░    19% (+8%)   ↻18:10            (=^･ω･^=)ﾉ "Feeling great!"
+5h  █████░░░░░░░    42% (+25%)  ↻18:10            (=^･ω･^=)ﾉ "Feeling great!"
 wk  ████████████    96% (+2%)   ↻10/5 18:00       (=ｘェｘ=) "Almost out this week..."
 ```
 
-The blue part of each bar and the blue `(+8%)` are this conversation's share of the window (see [below](#this-conversations-share)).
+The blue part of each bar and the blue `(+25%)` are this conversation's share of the window (see [below](#this-conversations-share)).
 
 ASCII style, for terminals without CJK fonts:
 
 ```
-5h  [##----------]  19% (+8%)   reset 18:10       (=^.^=)/ "Feeling great!"
+5h  [#####-------]  42% (+25%)  reset 18:10       (=^.^=)/ "Feeling great!"
 wk  [############]  96% (+2%)   reset 10/5 18:00  (=x.x=) "Almost out this week..."
 ```
 
