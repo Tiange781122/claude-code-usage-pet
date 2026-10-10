@@ -70,6 +70,24 @@ const account = async ($: EngineInterface, current: Limit[], myUsd: number) => {
   await update($, shares, prev => nextShares(prev, current, myUsd, othersUsd))
 }
 
+// Opt-in export for other local tools (a dashboard, a status bar): when ~/.cache/usage-pet/
+// exists, the latest limits are written to <that dir>/<config dir name>.json, e.g.
+// .claude-work.json. Without the directory nothing is written. Failures never reach the band.
+const exportLimits = async ($: EngineInterface, current: Limit[]) => {
+  try {
+    const home = await $.env.get('HOME')
+    if (!home || current.length === 0) return
+    const dir = `${home}/.cache/usage-pet`
+    if (!(await $.fs.exists(dir))) return
+    const configDir = (await $.env.get('CLAUDE_CONFIG_DIR')) || `${home}/.claude`
+    const name = configDir.replace(/\/+$/, '').split('/').pop() || 'default'
+    const at = await $.clock.now()
+    await $.fs.write(`${dir}/${name}.json`, JSON.stringify({ configDir, at, limits: current }))
+  } catch {
+    // best effort
+  }
+}
+
 export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     const result = await next(e)
@@ -77,6 +95,7 @@ export const register: Register = (on, options) => {
     const current = toLimits(usage.rateLimits)
     await update($, limits, () => current)
     await account($, current, usage.cost?.usd ?? 0)
+    await exportLimits($, current)
     return result
   })
 
@@ -85,6 +104,7 @@ export const register: Register = (on, options) => {
       const current = toLimits(e.rateLimits)
       await update($, limits, () => current)
       await account($, current, e.cost?.usd ?? 0)
+      await exportLimits($, current)
     }
     return next(e)
   })

@@ -179,3 +179,20 @@ test('stale sessions are dropped from the shared store', { options: { language: 
   expect(store.has('session:gone')).toBe(false)
   expect([...store.keys()]).toEqual(['session:me'])
 })
+
+test('export: writes the limits to ~/.cache/usage-pet/<config dir>.json only when that folder exists', async ($, on) => {
+  world(on, { LANG: 'en_US.UTF-8', HOME: '/home/u', CLAUDE_CONFIG_DIR: '/home/u/.claude-work' })
+  const writes: { path: string; text: string }[] = []
+  let exists = false
+  on('fs.exists', () => ({ value: exists }))
+  on('fs.write', ($, e) => (writes.push({ path: e.path, text: e.text }), { value: undefined }))
+  await $.session.measure(measureOf(USAGE))
+  expect(writes.length).toBe(0)
+  exists = true
+  await $.session.measure(measureOf(USAGE))
+  expect(writes.length).toBe(1)
+  expect(writes[0]!.path).toBe('/home/u/.cache/usage-pet/.claude-work.json')
+  const body = JSON.parse(writes[0]!.text)
+  expect(body.limits).toEqual(USAGE)
+  expect(body.at).toBe(NOW)
+})
