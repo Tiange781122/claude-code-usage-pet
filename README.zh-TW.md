@@ -98,6 +98,22 @@ claude plugin install usage-pet@usage-pet
 
 改完重開 Claude Code 生效。
 
+## 匯出給其他工具（需自行開啟）
+
+想把同樣的數字放到選單列、tmux 狀態列或自己的儀表板？建一次資料夾就好：
+
+```
+mkdir -p ~/.cache/usage-pet
+```
+
+之後每次 Claude Code 回報新的用量，外掛就把最新的用量窗口寫到 `~/.cache/usage-pet/<設定資料夾名稱>.json`：預設的 `~/.claude` 寫成 `.claude.json`；`CLAUDE_CONFIG_DIR` 是 `~/.claude-work` 時寫成 `.claude-work.json`。每個設定資料夾一個檔，每次覆寫：
+
+```json
+{"configDir":"/Users/you/.claude","at":1791617448167,"limits":[{"kind":"five_hour","percentUsed":36,"resetsAt":"2026-10-10T10:30:00.000Z"},{"kind":"seven_day","percentUsed":82,"resetsAt":"2026-10-11T02:00:00.000Z"}]}
+```
+
+`at` 是 epoch 毫秒。沒有這個資料夾就什麼都不寫；刪掉資料夾即可關閉匯出。
+
 ## 疑難排解
 
 **看到方塊（□）、問號，或貓臉歪掉**：你的終端機字型沒有顏文字用到的日文字。把 `petStyle` 改成 `ascii`（方法見上），用量條 `█░` 和 `↻` 也會一起換成 ASCII。如果台詞也變成方塊，再把 `language` 改成 `en`。Windows 舊式主控台較常發生；Windows Terminal 和 macOS 終端機通常正常。
@@ -109,8 +125,9 @@ claude plugin install usage-pet@usage-pet
 ## 隱私與成本
 
 - **不多花 token**：不呼叫模型，也不會加進你的提示內容；`claude plugin details usage-pet@usage-pet` 顯示常駐成本約 0 tok。
-- **不連網路**：只讀 Claude Code 本來就推送給外掛的用量數字，以及語系環境變數 `LC_ALL`、`LC_MESSAGES`、`LANG`。
+- **不連網路**：只讀 Claude Code 本來就推送給外掛的用量數字，語系環境變數 `LC_ALL`、`LC_MESSAGES`、`LANG`，以及匯出功能用的 `HOME`、`CLAUDE_CONFIG_DIR`。
 - **只寫一個小檔案**：為了估算每個對話的占比，每個對話會把自己的 session ID、花費（美元）和時間寫進外掛自己的儲存檔（`<設定資料夾>/plugins/store/usage-pet_*.json`）。不存其他資料，超過 8 天的紀錄會在下次使用時刪除，檔案不會離開你的電腦。
+- **匯出檔需自行開啟**：只有你建了 `~/.cache/usage-pet/` 才會寫入，內容只有最新的用量百分比和重置時間（見上方說明）。
 
 ## 參與貢獻
 

@@ -98,6 +98,22 @@ Pick whichever is easiest:
 
 Restart Claude Code to apply the change.
 
+## Export for other tools (opt-in)
+
+Want the same figures in a menu bar, a tmux status line or your own dashboard? Create the folder once:
+
+```
+mkdir -p ~/.cache/usage-pet
+```
+
+From then on, every time Claude Code reports new usage, the plugin writes the latest windows to `~/.cache/usage-pet/<config dir name>.json`: `.claude.json` for the default `~/.claude`, or `.claude-work.json` when `CLAUDE_CONFIG_DIR` is `~/.claude-work`. One file per config dir, overwritten in place:
+
+```json
+{"configDir":"/Users/you/.claude","at":1791617448167,"limits":[{"kind":"five_hour","percentUsed":36,"resetsAt":"2026-10-10T10:30:00.000Z"},{"kind":"seven_day","percentUsed":82,"resetsAt":"2026-10-11T02:00:00.000Z"}]}
+```
+
+`at` is milliseconds since the epoch. Without the folder nothing is written; delete the folder to turn the export off.
+
 ## Troubleshooting
 
 **I see boxes (□), question marks, or a misaligned cat.** Your terminal font lacks the Japanese characters the kaomoji use. Set `petStyle` to `ascii` (see above). This also replaces the `█░` bar and the `↻` mark. If the cat's lines are boxes too, set `language` to `en`. Common on the legacy Windows console; Windows Terminal and macOS terminals are usually fine.
@@ -109,8 +125,9 @@ Restart Claude Code to apply the change.
 ## Privacy and cost
 
 - **No extra tokens.** It never calls a model or adds to your prompt; `claude plugin details usage-pet@usage-pet` reports `~0 tok` always-on.
-- **No network.** It only reads the usage figures Claude Code already pushes to plugins, and the locale variables `LC_ALL`, `LC_MESSAGES`, `LANG`.
+- **No network.** It only reads the usage figures Claude Code already pushes to plugins, the locale variables `LC_ALL`, `LC_MESSAGES`, `LANG`, and (for the opt-in export) `HOME` and `CLAUDE_CONFIG_DIR`.
 - **One small local file.** To estimate each conversation's share, every session writes its session id, its spend in US dollars and a timestamp to the plugin's own store (`<config dir>/plugins/store/usage-pet_*.json`). Nothing else is stored, entries older than 8 days are removed the next time the plugin runs, and the file never leaves your machine.
+- **Opt-in export file.** Only if you created `~/.cache/usage-pet/`, the latest usage percentages and reset times are written there (see above). Nothing else goes into it.
 
 ## Contributing
 

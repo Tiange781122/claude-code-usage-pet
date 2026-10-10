@@ -98,6 +98,22 @@ Claude Code を再起動（または `/reload-plugins`）すると、プロン�
 
 変更後、Claude Code を再起動すると反映されます。
 
+## 他のツールへの書き出し（オプトイン）
+
+同じ数値をメニューバーや tmux のステータスライン、自作ダッシュボードにも出したい場合は、フォルダを一度作るだけです：
+
+```
+mkdir -p ~/.cache/usage-pet
+```
+
+以後、Claude Code が新しい使用量を通知するたびに、最新の値を `~/.cache/usage-pet/<設定フォルダ名>.json` に書き出します。既定の `~/.claude` なら `.claude.json`、`CLAUDE_CONFIG_DIR` が `~/.claude-work` なら `.claude-work.json` です。設定フォルダごとに 1 ファイルで、毎回上書きします：
+
+```json
+{"configDir":"/Users/you/.claude","at":1791617448167,"limits":[{"kind":"five_hour","percentUsed":36,"resetsAt":"2026-10-10T10:30:00.000Z"},{"kind":"seven_day","percentUsed":82,"resetsAt":"2026-10-11T02:00:00.000Z"}]}
+```
+
+`at` はエポックからのミリ秒です。フォルダがなければ何も書き出しません。フォルダを削除すれば書き出しは止まります。
+
 ## トラブルシューティング
 
 **四角（□）や「?」が出る、猫の顔がずれる**：ターミナルのフォントに顔文字の文字がありません。`petStyle` を `ascii` にしてください（方法は上記）。バーの `█░` と `↻` も ASCII に置き換わります。セリフも四角になる場合は `language` を `en` にしてください。古い Windows コンソールで起きやすく、Windows Terminal や macOS のターミナルでは通常問題ありません。
@@ -109,8 +125,9 @@ Claude Code を再起動（または `/reload-plugins`）すると、プロン�
 ## プライバシーとコスト
 
 - **トークンを追加で消費しません**：モデルを呼び出さず、プロンプトにも何も追加しません。`claude plugin details usage-pet@usage-pet` の常時コストは約 0 tok です。
-- **ネットワーク通信なし**：Claude Code がプラグインに渡す使用量の数値と、ロケール変数 `LC_ALL`、`LC_MESSAGES`、`LANG` だけを読みます。
+- **ネットワーク通信なし**：Claude Code がプラグインに渡す使用量の数値と、ロケール変数 `LC_ALL`、`LC_MESSAGES`、`LANG`、書き出し機能用の `HOME`、`CLAUDE_CONFIG_DIR` だけを読みます。
 - **小さなローカルファイルを 1 つだけ書きます**：会話ごとの割合を推定するため、各セッションはセッション ID、利用額（米ドル）、時刻をプラグイン専用の保存ファイル（`<設定フォルダ>/plugins/store/usage-pet_*.json`）に書き込みます。それ以外は保存せず、8 日より古い記録は次回の利用時に削除され、ファイルが PC の外に出ることはありません。
+- **書き出しファイルはオプトイン**：`~/.cache/usage-pet/` を作った場合だけ、最新の使用率とリセット時刻を書き出します（上記参照）。それ以外は書きません。
 
 ## コントリビュート
 
