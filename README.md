@@ -112,7 +112,7 @@ From then on, every time Claude Code reports new usage, the plugin writes the la
 {"configDir":"/Users/you/.claude","at":1791617448167,"limits":[{"kind":"five_hour","percentUsed":36,"resetsAt":"2026-10-10T10:30:00.000Z"},{"kind":"seven_day","percentUsed":82,"resetsAt":"2026-10-11T02:00:00.000Z"}]}
 ```
 
-`at` is milliseconds since the epoch. Without the folder nothing is written; delete the folder to turn the export off.
+`at` is milliseconds since the epoch. Each session also writes its own context fill to `~/.cache/usage-pet/sessions/<session id>.json` (`sessionId`, `at`, `tokens`, `window`, `percent`), so a dashboard can show how full every running conversation is. Without the folder nothing is written; delete the folder to turn the export off.
 
 ## Troubleshooting
 
@@ -127,7 +127,7 @@ From then on, every time Claude Code reports new usage, the plugin writes the la
 - **No extra tokens.** It never calls a model or adds to your prompt; `claude plugin details usage-pet@usage-pet` reports `~0 tok` always-on.
 - **No network.** It only reads the usage figures Claude Code already pushes to plugins, the locale variables `LC_ALL`, `LC_MESSAGES`, `LANG`, and (for the opt-in export) `HOME` and `CLAUDE_CONFIG_DIR`.
 - **One small local file.** To estimate each conversation's share, every session writes its session id, its spend in US dollars and a timestamp to the plugin's own store (`<config dir>/plugins/store/usage-pet_*.json`). Nothing else is stored, entries older than 8 days are removed the next time the plugin runs, and the file never leaves your machine.
-- **Opt-in export file.** Only if you created `~/.cache/usage-pet/`, the latest usage percentages and reset times are written there (see above). Nothing else goes into it.
+- **Opt-in export file.** Only if you created `~/.cache/usage-pet/`, the latest usage percentages and reset times, and each session's id and context fill, are written there (see above). Nothing else goes into it.
 
 ## Contributing
 

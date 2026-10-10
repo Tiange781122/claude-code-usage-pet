@@ -112,7 +112,7 @@ mkdir -p ~/.cache/usage-pet
 {"configDir":"/Users/you/.claude","at":1791617448167,"limits":[{"kind":"five_hour","percentUsed":36,"resetsAt":"2026-10-10T10:30:00.000Z"},{"kind":"seven_day","percentUsed":82,"resetsAt":"2026-10-11T02:00:00.000Z"}]}
 ```
 
-`at` 是 epoch 毫秒。沒有這個資料夾就什麼都不寫；刪掉資料夾即可關閉匯出。
+`at` 是 epoch 毫秒。每個對話另外把自己的 context 用量寫到 `~/.cache/usage-pet/sessions/<session ID>.json`（`sessionId`、`at`、`tokens`、`window`、`percent`），儀表板可以顯示每個進行中的對話用了多少 context。沒有這個資料夾就什麼都不寫；刪掉資料夾即可關閉匯出。
 
 ## 疑難排解
 
@@ -127,7 +127,7 @@ mkdir -p ~/.cache/usage-pet
 - **不多花 token**：不呼叫模型，也不會加進你的提示內容；`claude plugin details usage-pet@usage-pet` 顯示常駐成本約 0 tok。
 - **不連網路**：只讀 Claude Code 本來就推送給外掛的用量數字，語系環境變數 `LC_ALL`、`LC_MESSAGES`、`LANG`，以及匯出功能用的 `HOME`、`CLAUDE_CONFIG_DIR`。
 - **只寫一個小檔案**：為了估算每個對話的占比，每個對話會把自己的 session ID、花費（美元）和時間寫進外掛自己的儲存檔（`<設定資料夾>/plugins/store/usage-pet_*.json`）。不存其他資料，超過 8 天的紀錄會在下次使用時刪除，檔案不會離開你的電腦。
-- **匯出檔需自行開啟**：只有你建了 `~/.cache/usage-pet/` 才會寫入，內容只有最新的用量百分比和重置時間（見上方說明）。
+- **匯出檔需自行開啟**：只有你建了 `~/.cache/usage-pet/` 才會寫入，內容只有最新的用量百分比、重置時間，以及每個對話的 session ID 與 context 用量（見上方說明）。
 
 ## 參與貢獻
 
