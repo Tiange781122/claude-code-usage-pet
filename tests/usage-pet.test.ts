@@ -196,3 +196,14 @@ test('export: writes the limits to ~/.cache/usage-pet/<config dir>.json only whe
   expect(body.limits).toEqual(USAGE)
   expect(body.at).toBe(NOW)
 })
+
+test('export: writes the session context fill to sessions/<id>.json when the folder exists', async ($, on) => {
+  world(on, { LANG: 'en_US.UTF-8', HOME: '/home/u' })
+  const writes: { path: string; text: string }[] = []
+  on('fs.exists', () => ({ value: true }))
+  on('fs.write', ($, e) => (writes.push({ path: e.path, text: e.text }), { value: undefined }))
+  await $.session.measure({ context: { window: 200000, tokens: 50000, percent: 25 }, rateLimits: [], changed: ['context' as const] })
+  const ctx = writes.find(w => w.path === '/home/u/.cache/usage-pet/sessions/me.json')
+  expect(ctx).toBeDefined()
+  expect(JSON.parse(ctx!.text)).toEqual({ sessionId: 'me', at: NOW, tokens: 50000, window: 200000, percent: 25 })
+})

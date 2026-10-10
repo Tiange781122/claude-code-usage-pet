@@ -88,6 +88,26 @@ const exportLimits = async ($: EngineInterface, current: Limit[]) => {
   }
 }
 
+// Same opt-in folder: each session's context fill goes to <dir>/sessions/<session id>.json,
+// so a dashboard can show how full every running conversation is.
+const exportContext = async ($: EngineInterface, context: { tokens?: number; window: number; percent?: number } | undefined) => {
+  try {
+    if (!context || context.percent === undefined) return
+    const home = await $.env.get('HOME')
+    if (!home) return
+    const dir = `${home}/.cache/usage-pet`
+    if (!(await $.fs.exists(dir))) return
+    const id = await $.session.id()
+    if (!/^[\w-]+$/.test(id)) return
+    const at = await $.clock.now()
+    await $.fs.write(`${dir}/sessions/${id}.json`, JSON.stringify({
+      sessionId: id, at, tokens: context.tokens, window: context.window, percent: context.percent,
+    }))
+  } catch {
+    // best effort
+  }
+}
+
 export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     const result = await next(e)
@@ -96,10 +116,12 @@ export const register: Register = (on, options) => {
     await update($, limits, () => current)
     await account($, current, usage.cost?.usd ?? 0)
     await exportLimits($, current)
+    await exportContext($, usage.context)
     return result
   })
 
   on('session.measure', async ($, e, next) => {
+    if (e.changed.includes('context')) await exportContext($, e.context)
     if (e.changed.includes('rateLimits') || e.changed.includes('cost')) {
       const current = toLimits(e.rateLimits)
       await update($, limits, () => current)
